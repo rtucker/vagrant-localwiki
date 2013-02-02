@@ -9,12 +9,35 @@ Usage
 1. [Install Vagrant.](http://vagrantup.com/v1/docs/getting-started/index.html)
 2. Add a 64-bit Ubuntu 12.04 box: `vagrant box add precise64 http://files.vagrantup.com/precise64.box`
 3. Create and enter a directory that will contain your LocalWiki work, e.g. `~/localwiki-project/`
-4. Clone this repository.
+4. Clone this repository: `git clone <repository>'
 5. Clone the LocalWiki repository alongside this repository.
 6. Create an empty localwiki_data folder, which be mounted at `/usr/share/localwiki` to store LocalWiki's data files.
-7. Run `vagrant up`.
-8. Run `vagrant ssh` to access the machine. Your LocalWiki repository is mounted at `/srv/localwiki/`. The LocalWiki virtualenv is activated at login. By default, a Django superuser named `admin` is created with the password `admin`.
-9. Go to `/srv/localwiki/sapling/` and run `python manage.py init_settings` to initialize your secret key and enter your CloudMade API key.
+7. Go into the vagrant-localwiki subdirectory: `cd vagrant-localwiki'
+8. Run `git submodule update --init --recursive' to pull in submodules.
+9. Run `vagrant up`.
+10. Run `vagrant ssh` to access the machine. Your LocalWiki repository is mounted at `/srv/localwiki/`. The LocalWiki virtualenv is activated at login. By default, a Django superuser named `admin` is created with the password `admin`.
+11. Go to `/srv/localwiki/sapling/` and run `python manage.py init_settings` to initialize your secret key and enter your CloudMade API key.
+
+Locale issue
+------------
+
+If you get the following error:
+
+    [2013-02-02T02:12:34+00:00] FATAL: Mixlib::ShellOut::ShellCommandFailed: bash[create_postgis_template] (geodjango::postgis line 9) had an error: Mixlib::ShellOut::ShellCommandFailed: Expected process to exit with [0], but received '1'
+    ---- Begin output of "bash"  "/tmp/chef-script20130202-1151-16uzeol-0" ----
+    STDOUT: 
+    STDERR: createdb: database creation failed: ERROR:  encoding UTF8 does not match locale en_US
+    DETAIL:  The chosen LC_CTYPE setting requires encoding LATIN1.
+    ---- End output of "bash"  "/tmp/chef-script20130202-1151-16uzeol-0" ----
+    Ran "bash"  "/tmp/chef-script20130202-1151-16uzeol-0" returned 1
+    Chef never successfully completed! Any errors should be visible in the
+    output above. Please fix your recipes so that they properly complete.
+
+Try this:
+
+    vagrant destroy
+    vagrant up --provision-with shell
+    vagrant reload
 
 EC2 Support
 -----------

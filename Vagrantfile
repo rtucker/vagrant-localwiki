@@ -4,6 +4,7 @@ Vagrant::Config.run do |config|
     vm_config.vm.share_folder "localwiki", "/srv/localwiki", "../localwiki"
     vm_config.vm.share_folder "localwiki_data", "/usr/share/localwiki", "../localwiki_data"
     vm_config.vm.forward_port 8000, 8000
+    vm_config.vm.provision :shell, :inline => "update-locale LANG=en_US.UTF-8 LC_ALL="
     vm_config.vm.provision :chef_solo do |chef|
       chef.log_level = :debug
       chef.cookbooks_path = "cookbooks"
